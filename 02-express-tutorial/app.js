@@ -14,6 +14,10 @@ app.get("/api/products", (req, res) => {
     })
   res.json(newProducts);
 });
+app.get("/api/products/1", (req, res) => {
+    const singleProduct = products.find(product => product.id === 1)
+  res.json(singleProduct);
+});
 
 // app.get("*", (req, res) => {
 //   res.status(404).end("No resource found");
