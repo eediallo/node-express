@@ -3,7 +3,9 @@ import http from 'http'
 
 const server = http.createServer((req, res) =>{
     console.log('User hit the server')
-    res.end('This is our home page. Thank you for visiting')
+    res.writeHead(200, {'content-type': 'text/html'})
+    res.write('<p>Welcome to our home page</p>')
+    res.end()
 })
 
 
