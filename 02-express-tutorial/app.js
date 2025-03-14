@@ -1,4 +1,8 @@
 import http from "http";
+import { readFileSync } from "fs";
+
+//get files 
+const homePage = readFileSync('./index.html')
 
 const server = http.createServer((req, res) => {
   const url = req.url;
@@ -6,7 +10,7 @@ const server = http.createServer((req, res) => {
   // home page
   if (url === "/") {
     res.writeHead(200, { "content-type": "text/html" });
-    res.write("<p>Welcome to our home page</p>");
+    res.write(homePage);
     res.end();
   } 
   // about page
