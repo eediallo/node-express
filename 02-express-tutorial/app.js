@@ -1,18 +1,22 @@
 import express from 'express'
+import path from 'path'
+
+const __dirname = new URL('./navbar-app', import.meta.url).pathname
+
 
 const app = express()
 
 app.get('/', (req, res)=>{
-console.log('user hit the server')
-  res.status(200).send('Home Page')
-})
-app.get('/about', (req, res)=>{
-console.log('user hit the server')
-  res.status(200).send('About Page')
+    res.sendFile(path.resolve(__dirname, 'index.html'))
+    
 })
 app.all('*', (req, res)=>{
-console.log('user hit the server')
-  res.status(400).send('<h1>Resource not found</h1>')
+res.status(404).send('Resource not found.')
 })
 
-app.listen(3000, ()=> console.log('Server is listening on port 3000....'))
+// app.get('/', (req, res)=>{
+
+// })
+
+
+app.listen(3000, ()=> console.log('Server is listen on port 3000...'))
