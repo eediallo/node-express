@@ -20,6 +20,22 @@ app.get("/api/products/:productID/reviews/:reviewID", (req, res) => {
   return res.send("Hello World.");
 });
 
+app.get("/api/query", (req, res) => {
+  console.log(req.query)
+  const {search, limit} = req.query
+  let sortedProducts = [...products]
+  if(search){
+    sortedProducts = sortedProducts.filter(product => {
+      return product.name.startsWith(search)
+    })
+
+    if(limit){
+      sortedProducts = sortedProducts.slice(0, Number(limit))
+    }
+
+    res.status(200).json(sortedProducts)
+  }
+});
 // app.get("*", (req, res) => {
 //   res.status(404).end("No resource found");
 // });
