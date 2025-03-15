@@ -20,8 +20,8 @@ app.get("/api/products/:productID/reviews/:reviewID", (req, res) => {
   return res.send("Hello World.");
 });
 
+// query string
 app.get("/api/query", (req, res) => {
-  console.log(req.query)
   const {search, limit} = req.query
   let sortedProducts = [...products]
   if(search){
@@ -31,6 +31,10 @@ app.get("/api/query", (req, res) => {
 
     if(limit){
       sortedProducts = sortedProducts.slice(0, Number(limit))
+    }
+
+    if(sortedProducts < 1 ){
+      return res.json({success: true, data: sortedProducts})
     }
 
     res.status(200).json(sortedProducts)
