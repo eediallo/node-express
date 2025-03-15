@@ -1,6 +1,5 @@
 import express from "express";
 import {people} from './data.js'
-import path from 'path'
 
 const staticDIr = new URL('./methods-public', import.meta.url).pathname
 
