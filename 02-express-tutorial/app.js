@@ -1,17 +1,19 @@
 import express from "express";
 import { logger } from "./logger.js";
 import { authorize } from "./authorize.js";
+import morgan from "morgan";
+const app = express(); 
 
-const app = express();
+// app.use([logger, authorize])
 
-app.use([logger, authorize])
+app.use(morgan('tiny')) // apply to all routes
 
 app.get('/', logger, (req, res) =>{
   res.send('HOME PAGE')
 })
 
 
-app.get('/about', logger, (req, res) =>{
+app.get('/about', (req, res) =>{
   res.send('ABOUT PAGE')
 })
 
