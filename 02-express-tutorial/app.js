@@ -1,29 +1,10 @@
 import express from "express";
-import { logger } from "./logger.js";
-import { authorize } from "./authorize.js";
-import morgan from "morgan";
+import {people} from './data.js'
+
 const app = express(); 
 
-// app.use([logger, authorize])
-
-app.use(morgan('tiny')) // apply to all routes
-
-app.get('/', logger, (req, res) =>{
-  res.send('HOME PAGE')
+app.get('/api/people', (req, res) =>{
+  res.status(200).json({success: true, people: people})
 })
-
-
-app.get('/about', (req, res) =>{
-  res.send('ABOUT PAGE')
-})
-
-app.get('/api/items', logger, (req, res) =>{
-  res.send('Items PAGE')
-})
-
-app.get('/api/products', logger, (req, res) =>{
-  res.send('Products PAGE')
-})
-
 
 app.listen(3000, () => console.log("Server is running on port 3000..."));
