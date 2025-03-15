@@ -15,6 +15,17 @@ app.get("/api/products", (req, res) => {
   res.json(newProducts);
 });
 
+// Params
+app.get("/api/products/:productID", (req, res) => {
+  const {productID} = req.params
+  const sortedProducts = products.filter(product => {
+    return product.id === Number(productID)
+  })
+
+  res.status(200).json(sortedProducts)
+});
+
+
 app.get("/api/products/:productID/reviews/:reviewID", (req, res) => {
   console.log(req.params);
   return res.send("Hello World.");
