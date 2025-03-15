@@ -1,8 +1,10 @@
 import express from "express";
 import { logger } from "./logger.js";
+import { authorize } from "./authorize.js";
+
 const app = express();
 
-app.use(logger)
+app.use([logger, authorize])
 
 app.get('/', logger, (req, res) =>{
   res.send('HOME PAGE')
