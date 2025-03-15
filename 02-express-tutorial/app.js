@@ -7,6 +7,7 @@ const app = express();
 app.use([logger, authorize])
 
 app.get('/', logger, (req, res) =>{
+console.log(req.user)
   res.send('HOME PAGE')
 })
 
