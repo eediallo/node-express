@@ -64,4 +64,17 @@ app.put("/api/people/:id", (req, res) => {
   res.status(200).json({ success: true, data: updatePeopleList });
 });
 
+app.delete("/api/people/:id", (req, res) => {
+  const person = people.find((person) => person.id === Number(req.params.id));
+  if (!person) {
+    console.error(`Person with ${req.params.id} not found`);
+    res
+      .status(404)
+      .json({ success: false, msg: `Person with ${req.params.id} not found` });
+  }
+  const updatedPeopleList = people.filter(
+    (person) => person.id !== Number(req.params.id)
+  );
+  res.status(200).json({ success: true, data: updatedPeopleList });
+});
 app.listen(3000, () => console.log("Server is running on port 3000..."));
