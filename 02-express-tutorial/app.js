@@ -10,6 +10,14 @@ app.use(express.static(staticDIr));
 
 app.use(express.json());
 
+app.post("/login", (req, res) => {
+  const { name } = req.body;
+  if (!name) {
+    res.status(404).send("user not found");
+  }
+  res.status(200).send(`Welcome ${name}`);
+});
+
 app.get("/api/people", (req, res) => {
   res.status(200).json({ success: true, people: people });
 });
