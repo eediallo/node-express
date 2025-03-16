@@ -1,6 +1,7 @@
 import express from "express";
 
 import { PeopleRouter } from "./routes/people.js";
+import { loginRouter } from "./routes/login.js";
 
 const staticDIr = new URL("./methods-public", import.meta.url).pathname;
 
@@ -15,12 +16,7 @@ app.use(express.json());
 // serves people router
 app.use("/api/people", PeopleRouter);
 
-app.post("/login", (req, res) => {
-  const { name } = req.body;
-  if (!name) {
-    res.status(404).send("user not found");
-  }
-  res.status(200).send(`Welcome ${name}`);
-});
+// login router
+app.use("/login", loginRouter);
 
 app.listen(3000, () => console.log("Server is running on port 3000..."));
