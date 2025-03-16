@@ -1,13 +1,13 @@
 import express from "express";
 import { people } from "../data.js";
 
-const router = express.Router();
+const PeopleRouter = express.Router();
 
-router.get("/", (req, res) => {
+PeopleRouter.get("/", (req, res) => {
   res.status(200).json({ success: true, people: people });
 });
 
-router.post("/", (req, res) => {
+PeopleRouter.post("/", (req, res) => {
   console.log(req.body);
   const { name } = req.body;
   if (!name) {
@@ -18,7 +18,7 @@ router.post("/", (req, res) => {
   res.status(201).json({ success: true, name: name });
 });
 
-router.post("/postman", (req, res) => {
+PeopleRouter.post("/postman", (req, res) => {
   console.log(req.body);
   const { name, id } = req.body;
   if (!name) {
@@ -31,7 +31,7 @@ router.post("/postman", (req, res) => {
     .json({ success: true, data: [...people, { name: name, id: id }] });
 });
 
-router.put("/:id", (req, res) => {
+PeopleRouter.put("/:id", (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
 
@@ -53,7 +53,7 @@ router.put("/:id", (req, res) => {
   res.status(200).json({ success: true, data: updatePeopleList });
 });
 
-router.delete("/:id", (req, res) => {
+PeopleRouter.delete("/:id", (req, res) => {
   const person = people.find((person) => person.id === Number(req.params.id));
   if (!person) {
     console.error(`Person with ${req.params.id} not found`);
@@ -67,4 +67,4 @@ router.delete("/:id", (req, res) => {
   res.status(200).json({ success: true, data: updatedPeopleList });
 });
 
-export { router };
+export { PeopleRouter };
