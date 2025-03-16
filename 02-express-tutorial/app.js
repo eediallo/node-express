@@ -1,6 +1,6 @@
 import express from "express";
 
-import { router } from "./routes/people.js";
+import { PeopleRouter } from "./routes/people.js";
 
 const staticDIr = new URL("./methods-public", import.meta.url).pathname;
 
@@ -13,7 +13,7 @@ app.use(express.static(staticDIr));
 app.use(express.json());
 
 // serves people router
-app.use("/api/people", router);
+app.use("/api/people", PeopleRouter);
 
 app.post("/login", (req, res) => {
   const { name } = req.body;
