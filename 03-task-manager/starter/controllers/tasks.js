@@ -1,4 +1,3 @@
-import { tasks } from "../data.js";
 import { Task } from "../models/tasks.js";
 
 const fetchTasksFromDB = async () => {
@@ -41,30 +40,33 @@ const getSingleTask = async (req, res) => {
     }
     res.status(200).json({ success: true, task: task });
   } catch (err) {
-    res.status(404).json({ success: false, msg: err });
+    res.status(500).json({ success: false, msg: err });
   }
 };
 
 // update task
-const updateTask = (req, res) => {
-  const { id } = req.params;
-  const { task } = req.body;
+const updateTask = async (req, res) => {
+  const { id: taskID } = req.params;
+  const { name } = req.body;
 
-  const oldTask = tasks.find((t) => t.id === Number(id));
-  if (!oldTask) {
-    return res
-      .status(404)
-      .json({ success: false, msg: `Task with id ${id} not found` });
-  }
-
-  const updatedTasks = tasks.map((t) => {
-    if (t.id === Number(id)) {
-      t.task = task;
+  try {
+    const oldTask = await Task.findOne({ _id: taskID });
+    if (!oldTask) {
+      return res
+        .status(404)
+        .json({ success: false, msg: `Task with id ${taskID} not found` });
     }
-    return t;
-  });
 
-  res.status(200).json({ success: true, tasks: updatedTasks });
+    const updatedTask = await Task.findByIdAndUpdate(
+      taskID,
+      { name },
+      { new: true, runValidators: true }
+    );
+
+    res.status(200).json({ success: true, task: updatedTask });
+  } catch (err) {
+    res.status(500).json({ success: false, msg: err.message });
+  }
 };
 
 // delete task
