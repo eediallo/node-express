@@ -1,7 +1,7 @@
 import { tasks } from "../data.js";
 import { Task } from "../models/tasks.js";
 
-const fetchTasksFromData = async () => {
+const fetchTasksFromDB = async () => {
   try {
     const tasksData = await Task.find({});
     return tasksData;
@@ -12,7 +12,7 @@ const fetchTasksFromData = async () => {
 
 // get all tasks
 const getAllTasks = async (req, res) => {
-  const tasks = await fetchTasksFromData();
+  const tasks = await fetchTasksFromDB ();
   if (tasks.length === 0) {
     return res.status(404).json({ success: false, msg: "No task found." });
   }
