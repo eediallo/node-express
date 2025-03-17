@@ -9,9 +9,15 @@ const getAllTasks = (req, res) => {
 // create a task
 const createTask = async (req, res) => {
   //const { task } = req.body;
-  const task = await Task.create(req.body)
-  if (!task) {
-   return res.status(400).json({ success: false, msg: "Fail to create task" });
+  try {
+    const task = await Task.create(req.body);
+    if (!task) {
+      return res
+        .status(400)
+        .json({ success: false, msg: "Fail to create task" });
+    }
+  } catch (err) {
+    console.error(err);
   }
   res.status(201).json({ success: true, task: task });
 };
@@ -50,17 +56,17 @@ const updateTask = (req, res) => {
   res.status(200).json({ success: true, tasks: updatedTasks });
 };
 
-
-
 // delete task
 const deleteTask = (req, res) => {
-  const {id} = req.params
-  const task = tasks.find(t => t.id === Number(id))
-  if(!task){
-    return res.status(404).json({success: false, msg: `Task with ${id} not found`})
+  const { id } = req.params;
+  const task = tasks.find((t) => t.id === Number(id));
+  if (!task) {
+    return res
+      .status(404)
+      .json({ success: false, msg: `Task with ${id} not found` });
   }
-  const updatedTasks = tasks.filter(t => t.id !== Number(id))
-  res.status(201).json({success: false, tasks: updatedTasks})
+  const updatedTasks = tasks.filter((t) => t.id !== Number(id));
+  res.status(201).json({ success: false, tasks: updatedTasks });
 };
 
 export { getAllTasks, createTask, getSingleTask, updateTask, deleteTask };
