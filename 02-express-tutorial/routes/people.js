@@ -1,70 +1,22 @@
 import express from "express";
-import { people } from "../data.js";
+import {
+  getPerson,
+  createPerson,
+  getPersonPostman,
+  updatePerson,
+  deletePerson,
+} from "../controllers/people.js";
 
 const PeopleRouter = express.Router();
 
-PeopleRouter.get("/", (req, res) => {
-  res.status(200).json({ success: true, people: people });
-});
+PeopleRouter.get("/", getPerson);
 
-PeopleRouter.post("/", (req, res) => {
-  console.log(req.body);
-  const { name } = req.body;
-  if (!name) {
-    console.error(`Name must be provided`);
-    res.status(400).json({ success: false, name: name });
-  }
+PeopleRouter.post("/", createPerson);
 
-  res.status(201).json({ success: true, name: name });
-});
+PeopleRouter.post("/postman", getPersonPostman);
 
-PeopleRouter.post("/postman", (req, res) => {
-  console.log(req.body);
-  const { name, id } = req.body;
-  if (!name) {
-    console.error(`Name must be provided`);
-    res.status(400).json({ success: false, name: name });
-  }
+PeopleRouter.put("/:id", updatePerson);
 
-  res
-    .status(201)
-    .json({ success: true, data: [...people, { name: name, id: id }] });
-});
-
-PeopleRouter.put("/:id", (req, res) => {
-  const { id } = req.params;
-  const { name } = req.body;
-
-  const person = people.find((person) => person.id === Number(id));
-  if (!person) {
-    console.error(`Person with ${id} not found`);
-    res
-      .status(404)
-      .json({ success: false, msg: `Person with ${id} not found` });
-  }
-
-  const updatePeopleList = people.map((person) => {
-    if (person.id === Number(id)) {
-      person.name = name;
-    }
-    return person;
-  });
-
-  res.status(200).json({ success: true, data: updatePeopleList });
-});
-
-PeopleRouter.delete("/:id", (req, res) => {
-  const person = people.find((person) => person.id === Number(req.params.id));
-  if (!person) {
-    console.error(`Person with ${req.params.id} not found`);
-    res
-      .status(404)
-      .json({ success: false, msg: `Person with ${req.params.id} not found` });
-  }
-  const updatedPeopleList = people.filter(
-    (person) => person.id !== Number(req.params.id)
-  );
-  res.status(200).json({ success: true, data: updatedPeopleList });
-});
+PeopleRouter.delete("/:id", deletePerson);
 
 export { PeopleRouter };
