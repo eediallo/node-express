@@ -1,25 +1,33 @@
 import { tasks } from "../data.js";
 import { Task } from "../models/tasks.js";
 
+const fetchTasksFromData = async () => {
+  try {
+    const tasksData = await Task.find({});
+    return tasksData;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
 // get all tasks
-const getAllTasks = (req, res) => {
-  res.send("All items");
+const getAllTasks = async (req, res) => {
+  const tasks = await fetchTasksFromData();
+  if (tasks.length === 0) {
+    return res.status(404).json({ success: false, msg: "No task found." });
+  }
+  res.status(200).json({ success: true, tasks });
 };
 
 // create a task
 const createTask = async (req, res) => {
-  //const { task } = req.body;
+  console.log(req.body);
   try {
     const task = await Task.create(req.body);
-    if (!task) {
-      return res
-        .status(400)
-        .json({ success: false, msg: "Fail to create task" });
-    }
+    res.status(201).json({ success: true, task: task });
   } catch (err) {
-    console.error(err);
+    res.status(404).json({ success: false, msg: "Failed to create task" });
   }
-  res.status(201).json({ success: true, task: task });
 };
 
 // get single task
