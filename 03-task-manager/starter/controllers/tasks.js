@@ -49,8 +49,16 @@ const updateTask = (req, res) => {
 };
 
 
+
+// delete task
 const deleteTask = (req, res) => {
-  res.send("delete task");
+  const {id} = req.params
+  const task = tasks.find(t => t.id === Number(id))
+  if(!task){
+    return res.status(404).json({success: false, msg: `Task with ${id} not found`})
+  }
+  const updatedTasks = tasks.filter(t => t.id !== Number(id))
+  res.status(201).json({success: false, tasks: updatedTasks})
 };
 
 export { getAllTasks, createTask, getSingleTask, updateTask, deleteTask };
