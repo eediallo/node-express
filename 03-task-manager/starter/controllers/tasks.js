@@ -1,4 +1,5 @@
 import { tasks } from "../data.js";
+import { Task } from "../models/tasks.js";
 
 // get all tasks
 const getAllTasks = (req, res) => {
@@ -6,8 +7,9 @@ const getAllTasks = (req, res) => {
 };
 
 // create a task
-const createTask = (req, res) => {
-  const { task } = req.body;
+const createTask = async (req, res) => {
+  //const { task } = req.body;
+  const task = await Task.create(req.body)
   if (!task) {
    return res.status(400).json({ success: false, msg: "Fail to create task" });
   }
