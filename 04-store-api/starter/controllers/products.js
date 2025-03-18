@@ -3,7 +3,7 @@ import { productModel } from "../models/product.js";
 const getAllProducts = async (req, res) => {
   try {
     const queryObject = {}; // send all products if search does not match
-    const { feature, company } = req.query;
+    const { feature, company, name } = req.query;
 
     if (feature) {
       queryObject.feature = feature === "true" ? true : false;
@@ -11,6 +11,10 @@ const getAllProducts = async (req, res) => {
 
     if (company) {
       queryObject.company = company;
+    }
+
+    if (name) {
+      queryObject.name = { $regex: name, $options: "i" };
     }
 
     console.log(queryObject);
