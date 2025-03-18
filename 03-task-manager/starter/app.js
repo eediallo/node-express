@@ -6,6 +6,11 @@ dotenv.config();
 
 const app = express();
 
+const publicDir = new URL('./public', import.meta.url).pathname
+
+// serves static files
+app.use(express.static(publicDir))
+
 // parse json
 app.use(express.json())
 
