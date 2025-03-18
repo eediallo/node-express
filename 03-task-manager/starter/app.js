@@ -2,6 +2,7 @@ import express from "express";
 import { connectDB } from "./db/connection.js";
 import { tasksRouter } from "./routes/tasks.js";
 import dotenv from 'dotenv';
+import { notFound } from "./controllers/notFound.js";
 dotenv.config();
 
 const app = express();
@@ -18,6 +19,9 @@ const port = 3000;
 
 // setup tasks router
 app.use('/api/v1/tasks', tasksRouter)
+
+// not found router
+app.use(notFound)
 
 // ensure that connection to db is successful before running the server
 const start = async ()=>{
