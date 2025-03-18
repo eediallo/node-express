@@ -28,10 +28,10 @@ const getAllProducts = async (req, res) => {
 // for testing only
 const getAllProductsStatic = async (req, res) => {
   try {
-    const woodenDeskProducts = await productModel.find({ name: "wooden desk" });
+    const products = await productModel.find({}).sort('-name');
     res
       .status(200)
-      .json({ woodenDeskProducts, nbHits: woodenDeskProducts.length });
+      .json({ products, nbHits: products.length });
   } catch (err) {
     return res.status(404).json({ msg: "Product not found" });
   }
