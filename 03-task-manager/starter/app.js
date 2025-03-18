@@ -16,7 +16,7 @@ app.use(express.static(publicDir))
 // parse json
 app.use(express.json())
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // setup tasks router
 app.use('/api/v1/tasks', tasksRouter)
