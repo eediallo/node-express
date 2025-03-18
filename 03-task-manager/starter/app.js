@@ -2,7 +2,7 @@ import express from "express";
 import { connectDB } from "./db/connection.js";
 import { tasksRouter } from "./routes/tasks.js";
 import dotenv from 'dotenv';
-import { notFound } from "./controllers/notFound.js";
+import { notFound } from "./middleware/notFound.js";
 dotenv.config();
 
 const app = express();
