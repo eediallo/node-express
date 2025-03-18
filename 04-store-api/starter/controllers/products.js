@@ -3,7 +3,7 @@ import { productModel } from "../models/product.js";
 const getAllProducts = async (req, res) => {
   try {
     const queryObject = {}; // send all products if search does not match
-    const { feature, company, name, sort } = req.query;
+    const { feature, company, name, sort, fields } = req.query;
 
     if (feature) {
       queryObject.feature = feature === "true" ? true : false;
@@ -17,16 +17,21 @@ const getAllProducts = async (req, res) => {
       queryObject.name = { $regex: name, $options: "i" };
     }
 
-    console.log(queryObject);
+    // do this so that the sort can work. and use await afterwards
     let result = productModel.find(queryObject);
 
+    // sort
     if (sort) {
-      const sortList = sort.split(",").join("");
+      const sortList = sort.split(",").join(" ");
       result.sort(sortList);
     }
     result.sort("createdAt");
 
-    console.log(sort)
+    // select fields
+    if (fields) {
+      const selectedFields = fields.split(",").join(" ");
+      result.select(selectedFields);
+    }
     const products = await result;
     res.status(200).json({ products, nbHits: products.length });
   } catch (err) {
