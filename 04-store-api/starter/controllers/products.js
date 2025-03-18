@@ -42,7 +42,12 @@ const getAllProducts = async (req, res) => {
 // for testing only
 const getAllProductsStatic = async (req, res) => {
   try {
-    const products = await productModel.find({}).sort("-name price");
+    const products = await productModel
+      .find({})
+      .sort("name price")
+      .select("name price")
+      .limit(10)
+      .skip(1);
     res.status(200).json({ products, nbHits: products.length });
   } catch (err) {
     return res.status(404).json({ msg: "Product not found" });
