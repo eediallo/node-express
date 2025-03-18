@@ -3,7 +3,7 @@ import { productModel } from "../models/product.js";
 const getAllProducts = async (req, res) => {
   try {
     const queryObject = {}; // send all products if search does not match
-    const { feature, company, name } = req.query;
+    const { feature, company, name, sort } = req.query;
 
     if (feature) {
       queryObject.feature = feature === "true" ? true : false;
@@ -18,7 +18,16 @@ const getAllProducts = async (req, res) => {
     }
 
     console.log(queryObject);
-    const products = await productModel.find(queryObject);
+    let result = productModel.find(queryObject);
+
+    if (sort) {
+      const sortList = sort.split(",").join("");
+      result.sort(sortList);
+    }
+    result.sort("createdAt");
+
+    console.log(sort)
+    const products = await result;
     res.status(200).json({ products, nbHits: products.length });
   } catch (err) {
     return res.status(404).json({ msg: "Product not found" });
@@ -28,10 +37,8 @@ const getAllProducts = async (req, res) => {
 // for testing only
 const getAllProductsStatic = async (req, res) => {
   try {
-    const products = await productModel.find({}).sort('-name');
-    res
-      .status(200)
-      .json({ products, nbHits: products.length });
+    const products = await productModel.find({}).sort("-name price");
+    res.status(200).json({ products, nbHits: products.length });
   } catch (err) {
     return res.status(404).json({ msg: "Product not found" });
   }
