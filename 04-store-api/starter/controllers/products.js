@@ -50,8 +50,8 @@ const getAllProducts = async (req, res) => {
 const getAllProductsStatic = async (req, res) => {
   try {
     const products = await productModel
-      .find({})
-      .sort("name price")
+      .find({price: {$lt: 30}})
+      .sort("price")
       .select("name price")
       .limit(10)
       .skip(1);
