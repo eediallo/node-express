@@ -3,6 +3,8 @@ import { productModel } from "../models/product.js";
 const getAllProducts = async (req, res) => {
   res.status(200).json({ msg: "products route" });
 };
+
+// for testing only
 const getAllProductsStatic = async (req, res) => {
   try {
     const woodenDeskProducts = await productModel.find({ name: "wooden desk" });
