@@ -3,6 +3,7 @@
 // send back to front-end
 
 import { CustomAPIError } from "../errors/custom-error.js";
+import jsonwebtoken from "jsonwebtoken";
 
 // setup authentication so only the request with JWT can access the dashboard
 
@@ -18,7 +19,16 @@ export const login = (req, res) => {
   if (!username || !password) {
     throw new CustomAPIError("Please provide username and password", 400);
   }
-  res.status(200).json({ msg: `Welcome ${username}` });
+
+  // do this until DB is setup.
+  const id = Math.floor(Date.now() / 1000) + 60 * 60;
+  console.log(id);
+  const token = jsonwebtoken.sign(
+    { username: username },
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" }
+  );
+  res.status(200).json({ token });
 };
 
 export const dashboard = (req, res) => {
