@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import { notFound } from "./middleware/not-found.js";
 import { errorHandlerMiddleware } from "./middleware/error-handler.js";
+import { route } from "./routes/main.js";
 
 const app = express();
 
@@ -11,6 +12,7 @@ const publicDir = new URL("./public", import.meta.url).pathname;
 app.use(express.static(publicDir));
 app.use(express.json());
 
+app.use("/api/v1", route);
 app.use(notFound);
 app.use(errorHandlerMiddleware);
 
