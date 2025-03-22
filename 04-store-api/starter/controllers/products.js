@@ -3,7 +3,7 @@ import { productModel } from "../models/product.js";
 const getAllProducts = async (req, res) => {
   try {
     const queryObject = {}; // send all products if search does not match
-    const { feature, company, name, sort, fields } = req.query;
+    const { feature, company, name, sort, fields, numericFilters } = req.query;
 
     if (feature) {
       queryObject.feature = feature === "true" ? true : false;
@@ -15,6 +15,28 @@ const getAllProducts = async (req, res) => {
 
     if (name) {
       queryObject.name = { $regex: name, $options: "i" };
+    }
+
+    // numeric filters
+    if (numericFilters) {
+      const operatorMap = {
+        ">": "$gt",
+        ">=": "$gte",
+        "<": "$lt",
+        "<=": "$lte",
+      };
+      const regEx = /\b(<|>|>=|=|<|<=)\b/g;
+      let filters = numericFilters.replace(
+        regEx,
+        (match) => `-${operatorMap[match]}-`
+      );
+      const options = ["price", "rating"];
+      filters = filters.split(",").forEach((item) => {
+        const [field, operator, value] = item.split("-");
+        if (options.includes(field)) {
+          queryObject[field] = { [operator]: Number(value) };
+        }
+      });
     }
 
     // do this so that the sort can work. and use await afterwards
@@ -50,7 +72,7 @@ const getAllProducts = async (req, res) => {
 const getAllProductsStatic = async (req, res) => {
   try {
     const products = await productModel
-      .find({price: {$lt: 30}})
+      .find({ price: { $lt: 30 } })
       .sort("price")
       .select("name price")
       .limit(10)
