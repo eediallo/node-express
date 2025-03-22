@@ -1,10 +1,10 @@
-import { CustomAPIError } from "../errors/custom-error.js";
+import { UnauthenticatedError } from "../errors/index.js";
 import jsonwebtoken from "jsonwebtoken";
 
 export const authenticationMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw new CustomAPIError("Token is not provided", 401);
+    throw new UnauthenticatedError("Token is not provided");
   }
 
   const token = authHeader.split(" ")[1];
@@ -15,6 +15,6 @@ export const authenticationMiddleware = (req, res, next) => {
     req.user = { id, username };
     next();
   } catch (err) {
-    throw new CustomAPIError("No access allowed", 401);
+    throw new UnauthenticatedError("No access allowed");
   }
 };
