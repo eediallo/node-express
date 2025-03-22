@@ -1,17 +1,17 @@
-require('dotenv').config();
-require('express-async-errors');
+import "dotenv/config";
+import express from "express";
+import { notFound } from "./middleware/not-found.js";
+import { errorHandlerMiddleware } from "./middleware/error-handler.js";
 
-const express = require('express');
 const app = express();
 
-const notFoundMiddleware = require('./middleware/not-found');
-const errorHandlerMiddleware = require('./middleware/error-handler');
+const publicDir = new URL("./public", import.meta.url).pathname;
 
 // middleware
-app.use(express.static('./public'));
+app.use(express.static(publicDir));
 app.use(express.json());
 
-app.use(notFoundMiddleware);
+app.use(notFound);
 app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 3000;
