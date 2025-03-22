@@ -20,9 +20,8 @@ export const login = (req, res) => {
     throw new CustomAPIError("Please provide username and password", 400);
   }
 
-  // do this until DB is setup.
-  const id = Math.floor(Date.now() / 1000) + 60 * 60;
-  console.log(id);
+  // implement jwt token
+  const id = Math.floor(Date.now() / 1000) + 60 * 60; // do this until DB is setup.
   const token = jsonwebtoken.sign(
     { username: username },
     process.env.JWT_SECRET,
@@ -32,6 +31,15 @@ export const login = (req, res) => {
 };
 
 export const dashboard = (req, res) => {
+  // handle token in controller
+
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    throw new CustomAPIError("Token is not provided", 401);
+  }
+
+  const token = authHeader.split(" ")[1];
+  console.log(token);
   const secretNumber = Math.floor(Math.random() * 1000);
   res.status(200).json({
     msg: `Welcome Elhadj. Here is your secret number to access the data: ${secretNumber}`,
