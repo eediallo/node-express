@@ -3,9 +3,13 @@
 // send back to front-end
 
 // setup authentication so only the request with JWT can access the dashboard
+import { BadRequestError } from "../errors/index.js";
+import jsonwebtoken from "jsonwebtoken";
+import crypto from "crypto";
 
 export const login = (req, res) => {
   const { username, password } = req.body;
+  console.log(username, password);
   /**
    * Options to valid user
    *   1. Mongoose
@@ -14,21 +18,24 @@ export const login = (req, res) => {
    */
 
   if (!username || !password) {
-    throw new CustomAPIError("Please provide username and password", 400);
+    throw new BadRequestError("Please provide username and password");
   }
 
-  // implement jwt token
-  const id = Math.floor(Date.now() / 1000) + 60 * 60; // do this until DB is setup.
-  const token = jsonwebtoken.sign(
-    { username: username },
-    process.env.JWT_SECRET,
-    { expiresIn: "1h" }
-  );
-  res.status(200).json({ token });
+  try {
+    const id = crypto.randomUUID();
+    const token = jsonwebtoken.sign(
+      { username: username, id: id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    res.status(200).json({ msg: "User logged in successfully", token });
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 export const dashboard = (req, res) => {
-    console.log(req.user)
+  console.log(req.user);
   const secretNumber = Math.floor(Math.random() * 1000);
   res.status(200).json({
     msg: `Welcome ${req.user.username}. Here is your secret number to access the data: ${secretNumber}`,
