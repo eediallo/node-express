@@ -2,9 +2,6 @@
 // if exist create new JWT
 // send back to front-end
 
-import { CustomAPIError } from "../errors/custom-error.js";
-import jsonwebtoken from "jsonwebtoken";
-
 // setup authentication so only the request with JWT can access the dashboard
 
 export const login = (req, res) => {
@@ -31,23 +28,9 @@ export const login = (req, res) => {
 };
 
 export const dashboard = (req, res) => {
-  // handle token in controller
-
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw new CustomAPIError("Token is not provided", 401);
-  }
-
-  const token = authHeader.split(" ")[1];
-  console.log(token);
-
-  try {
-    const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
-    const secretNumber = Math.floor(Math.random() * 1000);
-    res.status(200).json({
-      msg: `Welcome ${decoded.username}. Here is your secret number to access the data: ${secretNumber}`,
-    });
-  } catch (err) {
-    throw new CustomAPIError("No access allowed", 401);
-  }
+    console.log(req.user)
+  const secretNumber = Math.floor(Math.random() * 1000);
+  res.status(200).json({
+    msg: `Welcome ${req.user.username}. Here is your secret number to access the data: ${secretNumber}`,
+  });
 };
