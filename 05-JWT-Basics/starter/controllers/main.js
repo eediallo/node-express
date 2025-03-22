@@ -40,8 +40,14 @@ export const dashboard = (req, res) => {
 
   const token = authHeader.split(" ")[1];
   console.log(token);
-  const secretNumber = Math.floor(Math.random() * 1000);
-  res.status(200).json({
-    msg: `Welcome Elhadj. Here is your secret number to access the data: ${secretNumber}`,
-  });
+
+  try {
+    const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
+    const secretNumber = Math.floor(Math.random() * 1000);
+    res.status(200).json({
+      msg: `Welcome ${decoded.username}. Here is your secret number to access the data: ${secretNumber}`,
+    });
+  } catch (err) {
+    throw new CustomAPIError("No access allowed", 401);
+  }
 };
