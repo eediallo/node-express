@@ -33,7 +33,7 @@ userSchema.pre("save", async function () {
 });
 
 
-userSchema.methods.getToken = function () {
+userSchema.methods.createJWT = function () {
   const token = jsonwebtoken.sign(
     { userId: this._id },
     process.env.JWT_SECRET,

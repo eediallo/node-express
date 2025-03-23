@@ -4,7 +4,7 @@ import jsonwebtoken from "jsonwebtoken";
 
 const registerUser = async (req, res) => {
   const user = await User.create({ ...req.body });
-  const token = user.getToken();
+  const token = user.createJWT();
   res.status(StatusCodes.CREATED).json({ name: user.name, token });
 };
 const loginUser = async (req, res) => {
