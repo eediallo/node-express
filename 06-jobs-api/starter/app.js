@@ -1,21 +1,21 @@
-require('dotenv').config();
-require('express-async-errors');
-const express = require('express');
+import "dotenv/config";
+import express from "express";
+import "express-async-errors";
 const app = express();
 
 // error handler
-const notFoundMiddleware = require('./middleware/not-found');
-const errorHandlerMiddleware = require('./middleware/error-handler');
+import { errorHandlerMiddleware } from "./middleware/error-handler.js";
+import { notFound } from "./middleware/not-found.js";
 
 app.use(express.json());
 // extra packages
 
 // routes
-app.get('/', (req, res) => {
-  res.send('jobs api');
+app.get("/", (req, res) => {
+  res.send("jobs api");
 });
 
-app.use(notFoundMiddleware);
+app.use(notFound);
 app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 3000;
