@@ -4,13 +4,7 @@ import jsonwebtoken from "jsonwebtoken";
 
 const registerUser = async (req, res) => {
   const user = await User.create({ ...req.body });
-  const token = jsonwebtoken.sign(
-    { userId: user._id },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "30d",
-    }
-  );
+  const token = user.getToken();
   res.status(StatusCodes.CREATED).json({ name: user.name, token });
 };
 const loginUser = async (req, res) => {
