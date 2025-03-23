@@ -3,6 +3,7 @@ import express from "express";
 import "express-async-errors";
 import authRouter from "./routes/auth.js";
 import jobRouter from "./routes/jobs.js";
+import { connectDB } from "./db/connect.js";
 const app = express();
 
 // error handler
@@ -23,6 +24,8 @@ const port = process.env.PORT || 3000;
 
 const start = async () => {
   try {
+    await connectDB(process.env.MONGO_URI);
+    console.log("Database connected...");
     app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
     );
