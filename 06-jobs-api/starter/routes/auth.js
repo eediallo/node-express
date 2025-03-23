@@ -1,8 +1,8 @@
-const registerUser = async (req, res) => {
-  res.send("register user route");
-};
-const loginUser = async (req, res) => {
-  res.send("Login user route");
-};
+import express from "express";
+import { loginUser, registerUser } from "../controllers/auth.js";
 
-export { registerUser, loginUser };
+const authRouter = express.Router();
+authRouter.post("/login", loginUser);
+authRouter.post("/register", registerUser);
+
+export default authRouter;

@@ -1,6 +1,8 @@
 import "dotenv/config";
 import express from "express";
 import "express-async-errors";
+import authRouter from "./routes/auth.js";
+import jobRouter from "./routes/jobs.js";
 const app = express();
 
 // error handler
@@ -11,9 +13,8 @@ app.use(express.json());
 // extra packages
 
 // routes
-app.get("/", (req, res) => {
-  res.send("jobs api");
-});
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/jobs", jobRouter);
 
 app.use(notFound);
 app.use(errorHandlerMiddleware);
