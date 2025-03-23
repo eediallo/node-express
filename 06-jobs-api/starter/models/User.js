@@ -32,13 +32,12 @@ userSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-
 userSchema.methods.createJWT = function () {
   const token = jsonwebtoken.sign(
     { userId: this._id },
     process.env.JWT_SECRET,
     {
-      expiresIn: "30d",
+      expiresIn: process.env.JWT_LIFETIME,
     }
   );
   return token;
