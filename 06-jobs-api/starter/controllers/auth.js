@@ -1,6 +1,6 @@
 import { User } from "../models/User.js";
 import { StatusCodes } from "http-status-codes";
-import jsonwebtoken from "jsonwebtoken";
+import { UnauthenticatedError } from "../errors/unauthenticated.js";
 
 const registerUser = async (req, res) => {
   const user = await User.create({ ...req.body });
@@ -8,7 +8,16 @@ const registerUser = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ name: user.name, token });
 };
 const loginUser = async (req, res) => {
-  res.send("Login user route");
+  const { email, password } = req.body;
+  if (!email || !password) {
+    throw new BadRequestError("Please provide email and password");
+  }
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new UnauthenticatedError("Invalid credentials");
+  }
+  const token = user.createJWT();
+  res.status(StatusCodes.OK).json({ name: user.name, token });
 };
 
 export { registerUser, loginUser };
