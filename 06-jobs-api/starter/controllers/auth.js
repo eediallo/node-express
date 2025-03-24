@@ -4,6 +4,7 @@ import { UnauthenticatedError } from "../errors/unauthenticated.js";
 
 const registerUser = async (req, res) => {
   const user = await User.create({ ...req.body });
+  const token = await user.createJWT();
   res.status(StatusCodes.CREATED).json({ name: user.name, token });
 };
 const loginUser = async (req, res) => {
@@ -22,7 +23,7 @@ const loginUser = async (req, res) => {
     throw new UnauthenticatedError("Invalid credentials");
   }
 
-  const token = user.createJWT();
+  const token = await user.createJWT();
 
   res.status(StatusCodes.OK).json({ name: user.name, token });
 };
