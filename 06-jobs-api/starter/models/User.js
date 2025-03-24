@@ -34,7 +34,7 @@ userSchema.pre("save", async function () {
 
 userSchema.methods.createJWT = function () {
   const token = jsonwebtoken.sign(
-    { userId: this._id },
+    { userId: this._id, name: this.name },
     process.env.JWT_SECRET,
     {
       expiresIn: process.env.JWT_LIFETIME,
