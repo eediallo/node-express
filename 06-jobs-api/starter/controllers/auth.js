@@ -4,7 +4,6 @@ import { UnauthenticatedError } from "../errors/unauthenticated.js";
 
 const registerUser = async (req, res) => {
   const user = await User.create({ ...req.body });
-  const token = user.createJWT();
   res.status(StatusCodes.CREATED).json({ name: user.name, token });
 };
 const loginUser = async (req, res) => {
@@ -16,7 +15,15 @@ const loginUser = async (req, res) => {
   if (!user) {
     throw new UnauthenticatedError("Invalid credentials");
   }
+
+  // compare password
+  const isMatch = await user.comparePasswords(password);
+  if (!isMatch) {
+    throw new UnauthenticatedError("Invalid credentials");
+  }
+
   const token = user.createJWT();
+
   res.status(StatusCodes.OK).json({ name: user.name, token });
 };
 
